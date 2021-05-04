@@ -1,4 +1,4 @@
-local Class = require(3696101309)
+local Class = require(script.Parent.Class)
 local Event = Class() do
 	function Event:init()
 		self._connections = {}
