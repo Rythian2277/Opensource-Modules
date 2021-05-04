@@ -1,4 +1,4 @@
-local Class = require(3696101309)
+local Class = require(script.Parent.Class)
 local Stack = Class() do
 	function Stack:init()
 		self._Storage = {}
