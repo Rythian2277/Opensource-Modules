@@ -1,4 +1,4 @@
-local Class = require(3696101309)
+local Class = require(script.Parent.Class)
 local Queue = Class() do
 	function Queue:init()
 		self._Storage = {}
