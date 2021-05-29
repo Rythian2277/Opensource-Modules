@@ -25,10 +25,6 @@ function class_mt:__newindex(key, value)
 
 	if baseinstance then
 		if table.find(attributes, key) then
-			if value == None then
-				value = nil
-			end
-
 			baseinstance:SetAttribute(key, value)
 			return
 		end
@@ -123,7 +119,9 @@ function class:wrapinstance(instance, attributes)
 	local trackedAttributes = instance:GetAttributes()
 
 	for i,v in pairs(attributes) do
-		instance:SetAttribute(i, v)
+		if v ~= None then
+			instance:SetAttribute(i, v)
+		end
 
 		if not table.find(trackedAttributes, i) then
 			table.insert(trackedAttributes, i)
