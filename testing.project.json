@@ -1,0 +1,14 @@
+{
+    "name": "Opensource-Modules - Testing",
+    "tree": {
+        "$className": "DataModel",
+
+        "ReplicatedStorage": {
+            "$className": "ReplicatedStorage",
+
+            "OSModules": {
+                "$path": "src"
+            }
+        }
+    }
+}
