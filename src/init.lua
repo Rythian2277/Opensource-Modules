@@ -6,7 +6,4 @@ return {
     Fuzzy = require(classes.Fuzzy),
     Queue = require(classes.Queue),
     Stack = require(classes.Stack),
-
-    Symbol = require(script.Symbol),
-    None = require(script.None),
 }

@@ -1,5 +1,3 @@
-local None = require(script.Parent.Parent.None)
-
 local class_mt = {}
 
 function class_mt:__index(key)
@@ -116,35 +114,25 @@ function class:addparent(...)
 end
 
 function class:wrapinstance(instance, attributes)
-	local trackedAttributes = instance:GetAttributes()
+	local whitelistedAttributes = {}
 
-	for i,v in pairs(attributes) do
-		if v ~= None then
-			instance:SetAttribute(i, v)
+	if attributes then
+		for i,v in pairs(attributes) do
+			if type(i) == "number" then
+				table.insert(whitelistedAttributes, v)
+			else
+				table.insert(whitelistedAttributes, i)
+				instance:SetAttribute(i, v)
+			end
 		end
-
-		if not table.find(trackedAttributes, i) then
-			table.insert(trackedAttributes, i)
+	else
+		for i in pairs(instance:GetAttributes()) do
+			table.insert(whitelistedAttributes, i)
 		end
 	end
 
-	instance.AttributeChanged:Connect(function(i)
-		if not table.find(trackedAttributes, i) then
-			table.insert(trackedAttributes, i)
-		end
-
-		local v = instance:GetAttribute(i)
-
-		-- We have to explicitly check for nil in case of false values
-		if v == nil then
-			v = None
-		end
-
-		attributes[i] = v
-	end)
-
 	rawset(self, "__baseinstance", instance)
-	rawset(self, "__attributes", trackedAttributes)
+	rawset(self, "__attributes", whitelistedAttributes)
 end
 
 function class:setmetamethod(name, value)
