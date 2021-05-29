@@ -1,10 +1,40 @@
+local None = require(script.Parent.Parent.None)
+
 local class_mt = {}
 
 function class_mt:__index(key)
+	local baseinstance = rawget(self, "__baseinstance")
+	local attributes = rawget(self, "__attributes")
+
+	if baseinstance then
+		if table.find(attributes, key) then
+			return baseinstance:GetAttribute(key)
+		end
+	end
+
 	if rawget(self, "__baseclass") then
 		return self.__baseclass[key]
 	end
+
 	return nil
+end
+
+function class_mt:__newindex(key, value)
+	local baseinstance = self.__baseinstance
+	local attributes = self.__attributes
+
+	if baseinstance then
+		if table.find(attributes, key) then
+			if value == None then
+				value = nil
+			end
+
+			baseinstance:SetAttribute(key, value)
+			return
+		end
+	end
+
+	rawset(self, key, value)
 end
 
 function class_mt:__call(...)
@@ -87,6 +117,36 @@ function class:addparent(...)
 		end
 	end
 	return self
+end
+
+function class:wrapinstance(instance, attributes)
+	local trackedAttributes = instance:GetAttributes()
+
+	for i,v in pairs(attributes) do
+		instance:SetAttribute(i, v)
+
+		if not table.find(trackedAttributes, i) then
+			table.insert(trackedAttributes, i)
+		end
+	end
+
+	instance.AttributeChanged:Connect(function(i)
+		if not table.find(trackedAttributes, i) then
+			table.insert(trackedAttributes, i)
+		end
+
+		local v = instance:GetAttribute(i)
+
+		-- We have to explicitly check for nil in case of false values
+		if v == nil then
+			v = None
+		end
+
+		attributes[i] = v
+	end)
+
+	rawset(self, "__baseinstance", instance)
+	rawset(self, "__attributes", trackedAttributes)
 end
 
 function class:setmetamethod(name, value)

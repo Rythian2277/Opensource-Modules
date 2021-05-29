@@ -6,8 +6,8 @@
         "ReplicatedStorage": {
             "$className": "ReplicatedStorage",
 
-            "OSClasses": {
-                "$path": "src/Classes"
+            "OSModules": {
+                "$path": "src"
             }
         }
     }
