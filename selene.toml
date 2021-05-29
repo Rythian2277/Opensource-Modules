@@ -1,1 +1,4 @@
 std="roblox"
+
+[rules]
+ignore_pattern="^(_|self)"
